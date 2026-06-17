@@ -1,0 +1,100 @@
+Library Management System SQL Project
+Create Database
+CREATE DATABASE LibraryDB;
+USE LibraryDB;
+
+Create Students Table
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(100),
+    department VARCHAR(50),
+    year_of_study INT
+);
+
+Create Books Table
+CREATE TABLE Books (
+    book_id INT PRIMARY KEY,
+    book_name VARCHAR(100),
+    author_name VARCHAR(100),
+    available_copies INT
+);
+
+Create IssuedBooks Table
+CREATE TABLE IssuedBooks (
+    issue_id INT PRIMARY KEY,
+    student_id INT,
+    book_id INT,
+    issue_date DATE,
+    return_date DATE,
+
+    FOREIGN KEY (student_id) REFERENCES Students(student_id),
+    FOREIGN KEY (book_id) REFERENCES Books(book_id)
+);
+
+Insert Data into Students
+INSERT INTO Students VALUES
+(1, 'Rahul Sharma', 'CSE', 2),
+(2, 'Aman Verma', 'IT', 3),
+(3, 'Priya Singh', 'ECE', 1),
+(4, 'Neha Gupta', 'CSE', 4);
+
+Insert Data into Books
+INSERT INTO Books VALUES
+(101, 'Database Systems', 'Navathe', 5),
+(102, 'Operating System', 'Galvin', 3),
+(103, 'Computer Networks', 'Tanenbaum', 4),
+(104, 'Data Structures', 'Schaum', 6);
+
+Insert Data into IssuedBooks
+INSERT INTO IssuedBooks VALUES
+(1, 1, 101, '2026-06-01', '2026-06-10'),
+(2, 2, 102, '2026-06-03', '2026-06-12'),
+(3, 1, 103, '2026-06-05', NULL),
+(4, 3, 104, '2026-06-06', NULL);
+
+Basic Queries
+View All Students
+SELECT * FROM Students;
+
+View All Books
+SELECT * FROM Books;
+
+Books Issued by Students
+SELECT Students.student_name, Books.book_name
+FROM IssuedBooks
+JOIN Students
+ON IssuedBooks.student_id = Students.student_id
+JOIN Books
+ON IssuedBooks.book_id = Books.book_id;
+
+Count Total Books
+SELECT COUNT(*) AS Total_Books
+FROM Books;
+
+Find Students from CSE Department
+SELECT * FROM Students
+WHERE department = 'CSE';
+
+Find Books Not Returned
+SELECT * FROM IssuedBooks
+WHERE return_date IS NULL;
+
+Count Books Issued by Each Student
+SELECT student_id, COUNT(book_id) AS total_books
+FROM IssuedBooks
+GROUP BY student_id;
+
+Show Available Books Greater Than 4
+SELECT * FROM Books
+WHERE available_copies > 4;
+
+Update Available Copies
+UPDATE Books
+SET available_copies = 4
+WHERE book_id = 101;
+
+Delete a Student Record
+DELETE FROM Students
+WHERE student_id = 4;
+
+
